@@ -7,14 +7,14 @@ public class Client {
     private int age;
     private String sex;
     private String region;
-    private int income;
-    private boolean married;
+    private long income;
+    private boolean is_married;
     private int child_count;
-    private boolean car;
-    private boolean save_act;
-    private boolean current_act;
-    private boolean mortgage;
-    private boolean pep;
+    private boolean has_car;
+    private boolean has_save_act;
+    private boolean has_current_act;
+    private boolean has_mortgage;
+    private boolean has_pep;
     public Client () {}
 
     public int getId () {
@@ -44,6 +44,10 @@ public class Client {
         return this;
     }
 
+    public String getFullName () {
+        return String.format("%s %s", this.first_name, this.last_name);
+    }
+
     public int getAge () {
         return age;
     }
@@ -71,21 +75,21 @@ public class Client {
         return this;
     }
 
-    public int getIncome () {
+    public long getIncome () {
         return income;
     }
 
-    public Client setIncome (int income) {
+    public Client setIncome (long income) {
         this.income = income;
         return this;
     }
 
     public boolean isMarried () {
-        return married;
+        return is_married;
     }
 
-    public Client setMarried (boolean married) {
-        this.married = married;
+    public Client setIsMarried (boolean married) {
+        this.is_married = married;
         return this;
     }
 
@@ -99,47 +103,47 @@ public class Client {
     }
 
     public boolean hasCar () {
-        return car;
+        return has_car;
     }
 
-    public Client setCar (boolean car) {
-        this.car = car;
+    public Client setHasCar (boolean car) {
+        this.has_car = car;
         return this;
     }
 
     public boolean hasSaveAct () {
-        return save_act;
+        return has_save_act;
     }
 
-    public Client setSaveAct (boolean save_act) {
-        this.save_act = save_act;
+    public Client setHasSaveAct (boolean save_act) {
+        this.has_save_act = save_act;
         return this;
     }
 
     public boolean hasCurrentAct () {
-        return current_act;
+        return has_current_act;
     }
 
-    public Client setCurrentAct (boolean current_act) {
-        this.current_act = current_act;
+    public Client setHasCurrentAct (boolean current_act) {
+        this.has_current_act = current_act;
         return this;
     }
 
-    public boolean isMortgage () {
-        return mortgage;
+    public boolean hasMortgage () {
+        return has_mortgage;
     }
 
-    public Client setMortgage (boolean mortgage) {
-        this.mortgage = mortgage;
+    public Client setHasMortgage (boolean mortgage) {
+        this.has_mortgage = mortgage;
         return this;
     }
 
     public boolean hasPep () {
-        return pep;
+        return has_pep;
     }
 
-    public Client setPep (boolean pep) {
-        this.pep = pep;
+    public Client setHasPep (boolean pep) {
+        this.has_pep = pep;
         return this;
     }
 
