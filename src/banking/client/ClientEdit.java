@@ -7,11 +7,14 @@ import javax.swing.*;
 import java.sql.*;
 
 public class ClientEdit extends ClientForm {
+    protected OnClientUpdatedListener mOnClientUpdatedListener;
     public ClientEdit (Client client) {
         super(client);
         // done in parent constructor
         // fillWith(client);
-        setOnClientSubmittedListener(c -> onUpdate(client.getId(), c));
+        setOnClientSubmittedListener(c -> {
+            onUpdate(client.getId(), c);
+        });
     }
 
     private void onUpdate (int oldId, Client client) {
@@ -34,8 +37,8 @@ public class ClientEdit extends ClientForm {
                     "has_mortgage = ?," +
                     "has_pep = ?," +
                     "first_name = ?," +
-                    "last_name = ?" +
-                    "id = ?" +
+                    "last_name = ?," +
+                    "id = ? " +
                     "WHERE id = ?"
             );
             statement.setInt(1, client.getAge());
@@ -53,15 +56,25 @@ public class ClientEdit extends ClientForm {
             statement.setString(13, client.getLastName());
             statement.setInt(14, client.getId());
             statement.setInt(15, oldId);
-            statement.executeUpdate();
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Updating user failed, no rows affected.");
             }
-            JOptionPane.showMessageDialog(null, "Client modifié.");
+            JOptionPane.showMessageDialog(this, "Client modifié.");
+            if (mOnClientUpdatedListener != null) {
+                mOnClientUpdatedListener.onClientUpdated(client);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+    }
+
+    public interface OnClientUpdatedListener {
+        void onClientUpdated(Client client);
+    }
+
+    public void setOnClientUpdatedListener (OnClientUpdatedListener mOnClientUpdatedListener) {
+        this.mOnClientUpdatedListener = mOnClientUpdatedListener;
     }
 }

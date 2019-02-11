@@ -2,6 +2,7 @@ package banking.client;
 
 import banking.App;
 import banking.model.Client;
+import com.sun.istack.internal.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,8 +47,17 @@ public class ClientForm extends JPanel {
     }
 
 
-    public ClientForm (Client client) {
+    public ClientForm (@Nullable Client client) {
         mOkLabel = "Sauvegarder";
+        mResetLabel = "Reset";
+        mIsEdit = true;
+        init();
+        fillWith(client);
+    }
+
+
+    public ClientForm (@Nullable Client client, String submitLabel) {
+        mOkLabel = submitLabel;
         mResetLabel = "Reset";
         mIsEdit = true;
         init();
@@ -68,20 +78,20 @@ public class ClientForm extends JPanel {
         mRegionField = addField("Region");
         mChildCountField = addField("Child count");
         mIncomeField = addField("Income");
-        mSexeField = addComboField("Sex", new String[]{"Male", "Female"}, event -> mSex = (String) event.getItem());
+        mSexeField = addComboField("Sex", new String[]{"MALE", "FEMALE"}, event -> mSex = (String) event.getItem());
         JPanel checkboxes = new JPanel(new GridLayout(3, 3));
         mMarriedField = addFieldBoolean("Married ?", event -> mMarried = event.getStateChange() == ItemEvent.SELECTED);
         mCarField = addFieldBoolean("has car ?", event -> mCar = event.getStateChange() == ItemEvent.SELECTED);
         mSaveActField = addFieldBoolean("has save act ?", event -> mSaveAct = event.getStateChange() == ItemEvent.SELECTED);
         mCurrentActField = addFieldBoolean("has current act ?", event -> mCurrentAct = event.getStateChange() == ItemEvent.SELECTED);
         mMortageField = addFieldBoolean("has mortgage ?", event -> mMortage = event.getStateChange() == ItemEvent.SELECTED);
-        mPepField = addFieldBoolean("has pep ?", event -> mPep = event.getStateChange() == ItemEvent.SELECTED);
+        // mPepField = addFieldBoolean("has pep ?", event -> mPep = event.getStateChange() == ItemEvent.SELECTED);
         checkboxes.add(mMarriedField);
         checkboxes.add(mCarField);
         checkboxes.add(mSaveActField);
         checkboxes.add(mCurrentActField);
         checkboxes.add(mMortageField);
-        checkboxes.add(mPepField);
+        // checkboxes.add(mPepField);
         mContainer.add(checkboxes);
 
         JPanel controlPanel = new JPanel(new FlowLayout());
@@ -104,7 +114,7 @@ public class ClientForm extends JPanel {
         controlPanel.setVisible(true);
         mContainer.add(controlPanel);
         // just for dev purpose
-        fill();
+        // fill();
         setVisible(true);
     }
 
@@ -121,15 +131,18 @@ public class ClientForm extends JPanel {
         mSaveActField.setSelected(false);
         mCurrentActField.setSelected(false);
         mMortageField.setSelected(false);
-        mPepField.setSelected(true);
+        // mPepField.setSelected(true);
     }
 
-    protected void fillWith (Client client) {
+    protected void fillWith (@Nullable  Client client) {
+        if (client == null) {
+            return;
+        }
         mIdField.setText(String.valueOf(client.getId()));
         mFirstNameField.setText(client.getFirstName());
         mLastNameField.setText(client.getLastName());
         mAgeField.setText(String.valueOf(client.getAge()));
-        // TODO: mSexeField.setSelectedIndex(1);
+        mSexeField.setSelectedIndex(client != null && client.getSex().equals("MALE") ? 0 : 1);
         mRegionField.setText(client.getRegion());
         mIncomeField.setText(String.valueOf(client.getIncome()));
         mMarriedField.setSelected(client.isMarried());
@@ -138,7 +151,7 @@ public class ClientForm extends JPanel {
         mSaveActField.setSelected(client.hasSaveAct());
         mCurrentActField.setSelected(client.hasCurrentAct());
         mMortageField.setSelected(client.hasMortgage());
-        mPepField.setSelected(client.hasPep());
+//        mPepField.setSelected(client.hasPep());
     }
 
     protected void resetFields () {
@@ -155,7 +168,7 @@ public class ClientForm extends JPanel {
         mSaveActField.setSelected(false);
         mCurrentActField.setSelected(false);
         mMortageField.setSelected(false);
-        mPepField.setSelected(false);
+        // mPepField.setSelected(false);
     }
 
     protected void addClient () {
@@ -178,7 +191,7 @@ public class ClientForm extends JPanel {
                 .setHasSaveAct(mSaveActField.isSelected())
                 .setHasCurrentAct(mCurrentActField.isSelected())
                 .setHasMortgage(mMortageField.isSelected())
-                .setHasPep(mPepField.isSelected())
+//                .setHasPep(mPepField.isSelected())
                 .setFirstName(mFirstNameField.getText())
                 .setLastName(mLastNameField.getText());
     }
